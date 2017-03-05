@@ -464,7 +464,7 @@ KoaBetterRouter.prototype.groupRoutes = function groupRoutes (dest, src1, src2) 
  */
 
 KoaBetterRouter.prototype.extend = function extend (router) {
-  if (!(router instanceof KoaBetterRouter)) {
+  if ( !(router instanceof KoaBetterRouter) && router.constructor.name !== 'KoaBetterRouter' ) {
     throw new TypeError('.extend: expect `router` to be instance of KoaBetterRouter')
   }
   router.routes.forEach((route) => {
