@@ -8,6 +8,14 @@
 'use strict'
 
 let utils = require('./utils')
+const createDebug = require('debug')
+const debug = createDebug('koa-router')
+
+createDebug.formatters.m = function (v) {
+  return JSON.stringify(v.map((m) => {
+    return (m.name && m.name.length) ? m.name : 'anonymous'
+  }))
+}
 
 /**
  * > Initialize `KoaBetterRouter` with optional `options`
@@ -60,7 +68,7 @@ function KoaBetterRouter (options) {
   }
 
   this.options = utils.extend({}, options)
-  this.options.prefix = options.prefix || '/'
+  this.options.prefix = this.options.prefix || '/'
   this.route = utils.pathMatch(this.options)
   this.routes = []
 }
@@ -180,6 +188,8 @@ KoaBetterRouter.prototype.createRoute = function createRoute (method, route, fns
   middlewares = middlewares.map((fn) => {
     return utils.isGenerator(fn) ? utils.convert(fn) : fn
   })
+
+  debug('create route %s %s %m', method, this.options.prefix + prefixed, middlewares)
 
   return {
     prefix: this.options.prefix,
@@ -465,7 +475,7 @@ KoaBetterRouter.prototype.groupRoutes = function groupRoutes (dest, src1, src2) 
  */
 
 KoaBetterRouter.prototype.extend = function extend (router) {
-  if ( !(router instanceof KoaBetterRouter) && router.constructor.name !== 'KoaBetterRouter' ) {
+  if (!(router instanceof KoaBetterRouter) && router.constructor.name !== 'KoaBetterRouter') {
     throw new TypeError('.extend: expect `router` to be instance of KoaBetterRouter')
   }
   router.routes.forEach((route) => {
@@ -524,7 +534,10 @@ KoaBetterRouter.prototype.extend = function extend (router) {
 
 KoaBetterRouter.prototype.middleware = function middleware () {
   return (ctx, next) => {
+    debug('request %s %s', ctx.method, ctx.path)
     for (let route of this.routes) {
+      debug('test %s %s', route.method, route.prefix + route.path)
+
       if (ctx.method !== route.method) {
         continue
       }

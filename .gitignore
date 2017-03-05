@@ -16,6 +16,7 @@ cache
 temp
 tmp
 koa-better-router
+.idea
 
 # Packages #
 # ##########

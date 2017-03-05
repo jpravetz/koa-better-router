@@ -10,17 +10,18 @@
   "scripts": {
     "lint": "standard --verbose",
     "pretest": "npm run lint",
-    "test": "npm run coverage",
-    "posttest": "npm run lint:coverage",
-    "coverage": "nyc node test.js",
-    "lint:coverage": "nyc check-coverage --lines 100 --branches 100 --statements 100 --functions 100",
-    "report-coverage": "nyc report --reporter=text-lcov | coveralls",
+    "test": "DEBUG='*' npm run coverage",
+    "posttest": "DEBUG='*' npm run lint:coverage",
+    "coverage": "DEBUG='*' nyc node test.js",
+    "lint:coverage": "DEBUG='*' nyc check-coverage --lines 100 --branches 100 --statements 100 --functions 100",
+    "report-coverage": "DEBUG='*' nyc report --reporter=text-lcov | coveralls",
     "prerelease": "npm test",
     "release": "standard-version --sign --no-verify",
     "precommit": "git add --all",
     "commit": "git-cz"
   },
   "dependencies": {
+    "debug": "^2.6.1",
     "extend-shallow": "^2.0.1",
     "is-es6-generator-function": "^1.0.0",
     "koa-compose": "^3.1.0",
