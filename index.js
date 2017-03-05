@@ -59,7 +59,8 @@ function KoaBetterRouter (options) {
     return new KoaBetterRouter(options)
   }
 
-  this.options = utils.extend({ prefix: '/' }, options)
+  this.options = utils.extend({}, options)
+  this.options.prefix = options.prefix || '/'
   this.route = utils.pathMatch(this.options)
   this.routes = []
 }
